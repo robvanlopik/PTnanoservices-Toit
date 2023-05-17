@@ -13,6 +13,9 @@ interface MQTTService:
   publish topic/string value/ByteArray -> none
   static PUBLISH_INDEX ::= 0
 
+  subscribe -> none
+  static SUBSCRIBE_INDEX ::= 1
+
 // to be added:
 // methods for subscribing and mechanism for receiving messages
 
@@ -25,5 +28,8 @@ class MQTTServiceClient extends services.ServiceClient implements MQTTService:
 
   publish topic/string value/ByteArray -> none:
     invoke_ MQTTService.PUBLISH_INDEX [name + "/" + topic, value]
+
+  subscribe -> none:
+    invoke_ MQTTService.SUBSCRIBE_INDEX [name]
 
 
