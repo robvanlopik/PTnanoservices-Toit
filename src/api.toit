@@ -18,11 +18,12 @@ interface MQTTService:
 
 class MQTTServiceClient extends services.ServiceClient implements MQTTService:
   static SELECTOR ::= MQTTService.SELECTOR
-  constructor selector/services.ServiceSelector=SELECTOR:
+  name/string
+  constructor .name selector/services.ServiceSelector=SELECTOR:
     assert: selector.matches SELECTOR
     super selector
 
   publish topic/string value/ByteArray -> none:
-    invoke_ MQTTService.PUBLISH_INDEX [topic, value]
+    invoke_ MQTTService.PUBLISH_INDEX [name + "/" + topic, value]
 
 
