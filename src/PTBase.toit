@@ -65,4 +65,4 @@ class MQTTServiceProvider extends ServiceProvider
     broker_.publish "$prefix_/$topic" data
   
   subscribe -> none:
-    print " subscribes"
+    print " subscribed"
