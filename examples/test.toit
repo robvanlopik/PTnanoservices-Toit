@@ -8,4 +8,5 @@ main:
     r := random 10
     print r
     tester.publish "random" (json.encode r)
+  tester.subscribe
 
