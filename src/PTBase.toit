@@ -57,12 +57,23 @@ class MQTTServiceProvider extends ServiceProvider
 
   handle index/int arguments/any --gid/int --client/int -> any:
     if index == MQTTService.PUBLISH_INDEX: return publish arguments[0] arguments[1]
-    if index == MQTTService.SUBSCRIBE_INDEX: return subscribe
+    if index == MQTTService.SUBSCRIBE_INDEX: return subscribe arguments[0]
     unreachable
 
   publish topic data -> none:
     print "$(%08d Time.monotonic_us): $topic - $data"
     broker_.publish "$prefix_/$topic" data
   
-  subscribe -> none:
-    print " subscribed"
+  subscribe name-> none:
+    print "$name subscribed"
+
+
+// postbox used for incoming messages
+
+class PostBox extends ServiceResource:
+  name/string
+  constructor .name
+    
+  on_closed:
+    null
+  
