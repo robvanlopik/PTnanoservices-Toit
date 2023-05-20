@@ -46,6 +46,8 @@ main:
   service := MQTTServiceProvider Messenger prefix
   service.install
   print "MQTT service provider should now be running"
+// here we should start listning
+
 
 class MQTTServiceProvider extends ServiceProvider
     implements MQTTService ServiceHandler:
@@ -58,22 +60,25 @@ class MQTTServiceProvider extends ServiceProvider
   handle index/int arguments/any --gid/int --client/int -> any:
     if index == MQTTService.PUBLISH_INDEX: return publish arguments[0] arguments[1]
     if index == MQTTService.SUBSCRIBE_INDEX: return subscribe arguments[0]
+
     unreachable
 
   publish topic data -> none:
     print "$(%08d Time.monotonic_us): $topic - $data"
     broker_.publish "$prefix_/$topic" data
   
-  subscribe name-> none:
-    print "$name subscribed"
-
+  subscribe name:
+    postbox := PostBox name this client
+    return postbox
+  
 
 // postbox used for incoming messages
 
 class PostBox extends ServiceResource:
   name/string
-  constructor .name
-    
-  on_closed:
-    null
+  constructor .name provider/ServiceProvider client/int:
+    super provider client --notifiable
+    print "$name postbox created"
+  on_closed -> none:
+    null  // should erase name from receiveDirectory
   
