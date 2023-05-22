@@ -16,6 +16,9 @@ interface MQTTService:
   subscribe id/string -> none
   static SUBSCRIBE_INDEX ::= 1
 
+  getMessage id/string -> any
+  static GETMESSAGE_INDEX ::= 2
+
 // to be added:
 // methods for subscribing and mechanism for receiving messages
 
@@ -32,11 +35,7 @@ class MQTTServiceClient extends services.ServiceClient implements MQTTService:
   subscribe id/string=name -> none:
     invoke_ MQTTService.SUBSCRIBE_INDEX [id]
 
-class ReceiverProxy extends services.ServiceResourceProxy:
-  on_notified_ notification/any -> none:
-    null
-  
-
-
+  getMessage id/string=name -> any:
+    return invoke_ MQTTService.GETMESSAGE_INDEX [id]
 
 

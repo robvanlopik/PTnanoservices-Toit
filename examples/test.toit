@@ -10,3 +10,14 @@ main:
     tester.publish "random" (json.encode r)
   tester.subscribe
 
+  task :: checkDataOnMQTT tester
+
+
+checkDataOnMQTT client/MQTTServiceClient:
+  while true:
+    answer := client.getMessage
+    if answer == null: sleep --ms=5000
+    else:
+      print "topic: $answer[0] data: $answer[1]"
+
+
