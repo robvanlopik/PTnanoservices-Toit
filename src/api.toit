@@ -3,6 +3,7 @@
 // inspired by githun:/kasperl//
 
 import system.services
+import encoding.json
 
 interface MQTTService:
   static SELECTOR ::= services.ServiceSelector
@@ -19,8 +20,10 @@ interface MQTTService:
   getMessage id/string -> any
   static GETMESSAGE_INDEX ::= 2
 
-// to be added:
-// methods for subscribing and mechanism for receiving messages
+  mqttLog message/string id/string  -> none
+  static MQTTLOG_INDEX ::= 3
+
+//----------------------------------------------------------------------
 
 class MQTTServiceClient extends services.ServiceClient implements MQTTService:
   static SELECTOR ::= MQTTService.SELECTOR
@@ -37,5 +40,8 @@ class MQTTServiceClient extends services.ServiceClient implements MQTTService:
 
   getMessage id/string=name -> any:
     return invoke_ MQTTService.GETMESSAGE_INDEX [id]
+
+  mqttLog message/string id/string=name  -> none:
+    invoke_ MQTTService.MQTTLOG_INDEX [name, json.encode message]
 
 

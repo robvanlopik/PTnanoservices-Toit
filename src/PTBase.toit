@@ -72,7 +72,8 @@ processSYS tList data:
 // and receives messages to be retrieved by client (indexed by service name)
 //
 class MQTTServiceProvider extends ServiceProvider
-    implements MQTTService ServiceHandler:
+  implements ServiceHandler: 
+//    implements MQTTService ServiceHandler:
   broker_/mqtt.Client
   prefix_/string
   directory := {:}
@@ -84,6 +85,7 @@ class MQTTServiceProvider extends ServiceProvider
     if index == MQTTService.PUBLISH_INDEX: return publish arguments[0] arguments[1]
     if index == MQTTService.SUBSCRIBE_INDEX: return subscribe arguments[0]
     if index == MQTTService.GETMESSAGE_INDEX: return getMessage arguments[0]
+    if index == MQTTService.MQTTLOG_INDEX: return mqttLog arguments[0] arguments[1]
     unreachable
 
   publish topic data -> none:
@@ -103,6 +105,9 @@ class MQTTServiceProvider extends ServiceProvider
 
   newMessage serviceName/string msg/List:
     directory[serviceName] = msg
+  
+  mqttLog name/string message/string  :
+    broker_.publish (prefix_ + "/" + name) (json.encode message)
   
   
 
