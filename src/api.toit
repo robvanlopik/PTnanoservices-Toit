@@ -14,13 +14,13 @@ interface MQTTService:
   publish topic/string value/ByteArray -> none
   static PUBLISH_INDEX ::= 0
 
-  subscribe id/string -> none
+  subscribe -> none
   static SUBSCRIBE_INDEX ::= 1
 
-  getMessage id/string -> any
+  getMessage -> any
   static GETMESSAGE_INDEX ::= 2
 
-  mqttLog message/string id/string  -> none
+  mqttLog message/string -> none
   static MQTTLOG_INDEX ::= 3
 
 //----------------------------------------------------------------------
@@ -35,13 +35,13 @@ class MQTTServiceClient extends services.ServiceClient implements MQTTService:
   publish topic/string value/ByteArray -> none:
     invoke_ MQTTService.PUBLISH_INDEX [name + "/" + topic, value]
 
-  subscribe id/string=name -> none:
-    invoke_ MQTTService.SUBSCRIBE_INDEX [id]
+  subscribe  -> none:
+    invoke_ MQTTService.SUBSCRIBE_INDEX [name]
 
-  getMessage id/string=name -> any:
-    return invoke_ MQTTService.GETMESSAGE_INDEX [id]
+  getMessage -> any:
+    return invoke_ MQTTService.GETMESSAGE_INDEX [name]
 
-  mqttLog message/string id/string=name  -> none:
+  mqttLog message/string -> none:
     invoke_ MQTTService.MQTTLOG_INDEX [name, json.encode message]
 
 
